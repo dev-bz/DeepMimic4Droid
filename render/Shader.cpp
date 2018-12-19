@@ -62,6 +62,7 @@ bool cShader::BuildShader(const std::string& vs_filename, const std::string& ps_
 	return succ;
 }
 
+int caffe_color = 0, no_shadow = 0;
 GLuint cShader::LoadShader(const std::string& filename, GLenum shader_type)
 {
 	GLuint shader_handle = glCreateShader(shader_type);
@@ -72,6 +73,21 @@ GLuint cShader::LoadShader(const std::string& filename, GLenum shader_type)
 
 	std::string shader_code((std::istreambuf_iterator<char>(shader_file)),
 		(std::istreambuf_iterator<char>()));
+	if (shader_type == GL_FRAGMENT_SHADER) {
+		if (caffe_color) {
+			int pos = shader_code.find("#ifndef CAFFE");
+			if (pos > 0)
+				shader_code.replace(pos + 3, 1, "");
+		}
+		{
+		int pos = shader_code.find(	"#define USE_SHADOW ");
+		if (pos > 0) {
+			char type[2] = "0";
+			type[0] = '0' + no_shadow;
+			shader_code.replace(pos + 19, 1, type);
+		}
+		}
+	}
 
 	const char* shader_code_str = shader_code.c_str();
 	glShaderSource(shader_handle, 1, &shader_code_str, NULL);

@@ -537,6 +537,7 @@ void cDeepMimicCore::SetSampleCount(int count)
 	}
 }
 
+extern "C" void use_arg(const char *path, int cmd);
 void cDeepMimicCore::SetupScene()
 {
 	ClearScene();
@@ -561,6 +562,14 @@ void cDeepMimicCore::SetupScene()
 		mScene->ParseArgs(mArgParser);
 		mScene->Init();
 		printf("Loaded scene: %s\n", mScene->GetName().c_str());
+	}
+	std::string model_files = "";
+	mArgParser->ParseString("model_files", model_files);
+	if (model_files != "") {
+		int p = model_files.find(".ckpt");
+		if (p > 0)
+			model_files.replace(p, 5, "_float.bin");
+		use_arg(model_files.c_str(), 0);
 	}
 }
 

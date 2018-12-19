@@ -80,7 +80,7 @@ public:
     void SetAttributeData(tAttribInfo &info)
     { SetAttributeData(info.mAttribNumber, info.mNumComp, info.mDataOffset, info.mDataStride); }
 
-    void SetAttributeData(unsigned int mAttribNumber, unsigned int mNumComp, unsigned int mDataOffset, unsigned int mDataStride)
+    void SetAttributeData(unsigned int mAttribNumber, unsigned int mNumComp, unsigned long mDataOffset, unsigned int mDataStride)
     {
         glEnableVertexAttribArray(mAttribNumber);
         glVertexAttribPointer(mAttribNumber, mNumComp, GL_FLOAT, GL_FALSE,

@@ -1,0 +1,1 @@
+{"append":[],"appendChanged":false,"build_mode":"user","cflags":"","dirs":"","ldflags":"","mode":"Native","output_bin":"","run_mode":3,"shell_cleanup":"make clean","shell_command":"make -j6 \"CC\u003dgcc (CIDE:MAKEMODEARGS)\" \"CXX\u003dg++ (CIDE:MAKEMODEARGS)\" SHELL\u003d\"$SHELL\" OUTPUT\u003d(CIDE:BIN) -C (CIDE:CURSRCDIR)"}

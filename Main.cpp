@@ -6,7 +6,7 @@
 
 #include "render/DrawUtil.h"
 #include "render/TextureDesc.h"
-
+#include "MainHead.i"
 // Dimensions of the window we are drawing into.
 int gWinWidth = 800;
 int gWinHeight = static_cast<int>(gWinWidth * 9.0 / 16.0);
@@ -100,6 +100,7 @@ void Update(double time_elapsed)
 	double timestep = time_elapsed / num_substeps;
 	num_substeps = (time_elapsed == 0) ? 1 : num_substeps;
 
+	if (running)
 	for (int i = 0; i < num_substeps; ++i)
 	{
 		for (int id = 0; id < gCore->GetNumAgents(); ++id)
@@ -112,6 +113,7 @@ void Update(double time_elapsed)
 				++gSampleCount;
 
 				std::vector<double> action = std::vector<double>(gCore->GetActionSize(id), 0);
+				compute(s.data(), s.size(), action.data(), action.size());
 				gCore->SetAction(id, action);
 			}
 		}
@@ -374,4 +376,4 @@ int main(int argc, char** argv)
 
 	return EXIT_SUCCESS;
 }
-
+#include"MainExt.i"

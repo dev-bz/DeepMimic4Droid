@@ -9,8 +9,8 @@ const tVector gCameraUp = tVector(0, 1, 0, 0);
 
 const double gViewWidth = 4.5;
 const double gViewHeight = gViewWidth * 9.0 / 16.0;
-const double gViewNearZ = 2;
-const double gViewFarZ = 500;
+const double gViewNearZ = 0.25;
+const double gViewFarZ = 200;
 
 const tVector gLineColor = tVector(0, 0, 0, 1);
 const tVector gVisOffset = tVector(0, 0, 1, 0); // offset for visualization elements
@@ -18,7 +18,7 @@ const tVector gVisOffset = tVector(0, 0, 1, 0); // offset for visualization elem
 cDrawScene::cDrawScene()
 {
 	mCamTrackMode = eCamTrackModeXZ;
-	mDrawInfo = true;
+	mDrawInfo = false;
 }
 
 cDrawScene::~cDrawScene()
@@ -323,8 +323,14 @@ tVector cDrawScene::GetBkgColor() const
 	return tVector(0.97, 0.97, 1, 0);
 }
 
+extern float gyro[16], rot_view;
 void cDrawScene::SetupView()
 {
+	tMatrix view_mat =
+				cMathUtil::RotateMat(tVector(-M_PI_2, rot_view, 0, 0)) *
+				cMathUtil::RotateMat(tQuaternion(gyro[3], gyro[0], gyro[1], gyro[2]));
+	mCamera.SetPosition(view_mat * tVector(0, 0, 3.5, 0) + mCamera.GetFocus());
+	mCamera.SetUp(view_mat * tVector(0, 1, 0, 0));
 	cDrawUtil::PushMatrixProj();
 	mCamera.SetupGLProj();
 

@@ -21,8 +21,8 @@ bool cShadowMap::Init(unsigned int width, unsigned int height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
 
-	float border_color[4] = { 1.f, 1.f, 1.f, 1.f };
-	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border_color);
+	//float border_color[4] = { 1.f, 1.f, 1.f, 1.f };
+	//glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border_color);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, width, height,
 		0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
