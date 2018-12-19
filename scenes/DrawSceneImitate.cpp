@@ -5,7 +5,7 @@
 #include "sim/RBDUtil.h"
 
 const double gLinkWidth = 0.025f;
-const tVector gLineColor = tVector(0, 0, 0, 1);
+const tVector gLineColor = tVector(0, 0, 0, 0);
 const tVector gFilLColor = tVector(0.6f, 0.65f, 0.675f, 1);
 
 cDrawSceneImitate::cDrawSceneImitate()
@@ -47,6 +47,9 @@ void cDrawSceneImitate::Keyboard(unsigned char key, double device_x, double devi
 	{
 	case 'k':
 		DrawKinChar(!mDrawKinChar);
+		break;
+	case 'm':
+		InitRenderResources();
 		break;
 	default:
 		break;

@@ -6,6 +6,7 @@
 #include <iostream>
 #include <sstream>
 #include "util/FileUtil.h"
+#include "android_file.hpp"
 
 const char gKeyStart = '-';
 const char gCommentStart = '#';
@@ -79,8 +80,8 @@ void cArgParser::Clear()
 
 bool cArgParser::LoadFile(const std::string& file)
 {
-	FILE* file_ptr = cFileUtil::OpenFile(file.c_str(), "r");
-	bool succ = (file_ptr != nullptr);
+	//FILE* file_ptr = cFileUtil::OpenFile(file.c_str(), "r");
+	//bool succ = (file_ptr != nullptr);
 
 	std::ifstream file_stream(file.c_str());
 	std::string line_str;
@@ -89,7 +90,7 @@ bool cArgParser::LoadFile(const std::string& file)
 	std::vector<std::string> arg_strs;
 	const std::string delims = " \t\n\r,";
 
-	while (std::getline(file_stream, line_str))
+	while (std::getline((std::istream&)file_stream, line_str))
 	{
 		if (line_str.size() > 0 && !IsComment(line_str))
 		{
@@ -119,10 +120,10 @@ bool cArgParser::LoadFile(const std::string& file)
 		}
 	}
 
-	cFileUtil::CloseFile(file_ptr);
+	//cFileUtil::CloseFile(file_ptr);
 	LoadArgs(arg_strs);
 
-	return succ;
+	return arg_strs.size() > 0;
 }
 
 bool cArgParser::ParseString(const std::string& key, std::string& out) const

@@ -842,7 +842,7 @@ void cSceneSimChar::SpawnProjectile()
 	double max_size = 0.3;
 	double min_speed = 10;
 	double max_speed = 20;
-	double life_time = 2;
+	double life_time = 5;
 	double y_offset = 0;
 	SpawnProjectile(density, min_size, max_size, min_speed, max_speed, y_offset, life_time);
 }
@@ -854,7 +854,7 @@ void cSceneSimChar::SpawnBigProjectile()
 	double max_size = 1.75;
 	double min_speed = 11;
 	double max_speed = 12;
-	double life_time = 2;
+	double life_time = 5;
 	double y_offset = 0.5;
 	SpawnProjectile(density, min_size, max_size, min_speed, max_speed, y_offset, life_time);
 }

@@ -1,5 +1,6 @@
 #include "Shader.h"
 #include <iostream>
+#include "android_file.hpp"
 
 std::stack<cShader::tShaderEntry> cShader::gShaderStack = std::stack<tShaderEntry>();
 

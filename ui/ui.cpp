@@ -84,7 +84,7 @@ extern "C" void box2d_ui(int width, int height, int mx, int my,
 			caffe_color = !caffe_color;
 			Keyboard('m', 1, 1);
 		}
-		if (imguiButton("Change Shsdow", true)) {
+		if (imguiButton("Change Shadow", true)) {
 			no_shadow = (no_shadow+1)%3;
 			Keyboard('m', 1, 1);
 		}

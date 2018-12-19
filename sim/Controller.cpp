@@ -1,6 +1,7 @@
 #include "Controller.h"
 #include "sim/SimCharacter.h"
 #include "util/FileUtil.h"
+#include "android_file.hpp"
 
 cController::cController()
 {

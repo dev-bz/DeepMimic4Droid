@@ -1,3 +1,28 @@
+#undef main
+int main(int _argc, char **_argv) {
+	char arg[3][128] = {"a.out", "--arg_file", "data/args/kin_char_args.txt"};
+	char *argv[3] = {arg[1], arg[2]};
+	int argc = 2;
+	FormatArgs(argc, argv, gArgs);
+	InitDraw(argc, argv);
+	SetupDeepMimicCore();
+	for (int i = 0; i < 1000; ++i) {
+		if (i % 10 == 9) {
+			printf("Keyboard\n");
+			Keyboard('x', 1, 1);
+		}
+		Update(gAnimStep);
+	}
+	gArgs[1] = "data/args/run_humanoid3d_robot_args.txt";
+	Reload();
+	for (int i = 0; i < 1000; ++i) {
+		if (i % 10 == 9) {
+			printf("Keyboard\n");
+			Keyboard('x', 1, 1);
+		}
+		Update(gAnimStep);
+	}
+}
 extern "C" void start(int argc, char **argv) {
 
 	FormatArgs(argc, argv, gArgs);

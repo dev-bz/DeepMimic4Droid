@@ -94,6 +94,7 @@ void cDeepMimicCore::Keyboard(int key, int x, int y)
 	char c = static_cast<char>(key);
 	double device_x = 0;
 	double device_y = 0;
+	if(EnableDraw())
 	CalcDeviceCoord(x, y, device_x, device_y);
 	mScene->Keyboard(c, device_x, device_y);
 }

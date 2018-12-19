@@ -37,7 +37,11 @@ std::unique_ptr<cDeepMimicCore> gCore;
 
 void SetupDeepMimicCore()
 {
+#ifdef ENABLE_DRAW
 	bool enable_draw = true;
+#else
+	bool enable_draw = false;
+#endif
 	gCore = std::unique_ptr<cDeepMimicCore>(new cDeepMimicCore(enable_draw));
 	gCore->ParseArgs(gArgs);
 	gCore->Init();

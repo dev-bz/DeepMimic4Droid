@@ -160,7 +160,7 @@ void glRotatef(float *R, float qw, float qx, float qy, float qz) {
 }*/
 float gyro[16] = {1, 0, 0, 0};
 float rot_view = 0;
-#include "glut.h"
+#include "GL/freeglut.h"
 DrawFunc drawfunc;
 ReshapeFunc reshapefunc;
 KeyboardFunc keyboardfunc;
@@ -573,7 +573,7 @@ void android_main(struct android_app *state) {
 }
 // END_INCLUDE(all)
 #else
-#include "glut.h"
+#include "GL/freeglut.h"
 #include <stdio.h>
 #include <stdlib.h>
 DrawFunc drawfunc;

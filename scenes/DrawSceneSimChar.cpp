@@ -12,7 +12,7 @@
 
 const tVector gCamFocus0 = tVector(0, 0.75, 0, 0);
 
-const tVector gLineColor = tVector(0, 0, 0, 1);
+const tVector gLineColor = tVector(0, 0, 0, 0);
 const size_t gInitGroundUpdateCount = std::numeric_limits<size_t>::max();
 
 const std::string gOutputCharFile = "output/char_state.txt";

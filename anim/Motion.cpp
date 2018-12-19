@@ -4,6 +4,7 @@
 
 #include "util/FileUtil.h"
 #include "util/JsonUtil.h"
+#include "android_file.hpp"
 
 const double gMinTime = 0;
 

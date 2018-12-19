@@ -12,7 +12,7 @@ const double gViewHeight = gViewWidth * 9.0 / 16.0;
 const double gViewNearZ = 0.25;
 const double gViewFarZ = 200;
 
-const tVector gLineColor = tVector(0, 0, 0, 1);
+const tVector gLineColor = tVector(0, 0, 0, 0);
 const tVector gVisOffset = tVector(0, 0, 1, 0); // offset for visualization elements
 
 cDrawScene::cDrawScene()
@@ -488,21 +488,24 @@ void cDrawScene::InitRenderResources()
 		mShaderMesh->GetUniformHandle(mMeshLightColourHandle, "gLightColour");
 		mShaderMesh->GetUniformHandle(mMeshAmbientColourHandle, "gAmbientColour");
 		mShaderMesh->GetUniformHandle(mMeshShadowProjHandle, "gShadowProj");
+		mShaderMesh->GetUniformHandle(mMeshShadowViewHandle, "gShadowView");
 		mShaderMesh->GetUniformHandle(mMeshMaterialDataHandle, "gMaterialData");
 		mShaderMesh->GetUniformHandle(mMeshFogColorHandle, "gFogColor");
 		mShaderMesh->GetUniformHandle(mMeshFogDataHandle, "gFogData");
 
 		GLint albedo_tex = glGetUniformLocation(mShaderMesh->GetProg(), "gTexture");
 		glUniform1i(albedo_tex, 0);
+		if(mMeshShadowProjHandle!=0xffffffff){
 		GLint shadow_tex = glGetUniformLocation(mShaderMesh->GetProg(), "gShadowTex");
 		glUniform1i(shadow_tex, 1);
+		}
 		mShaderMesh->Unbind();
 	}
 
-	float shadow_size = 40.f;
+	float shadow_size = 2.25f;
 	float shadow_near_z = 1.f;
 	float shadow_far_z = 60.f;
-	int shadow_res = 2048;
+	int shadow_res = 256;
 	mShadowCam = cCamera(cCamera::eProjOrtho, tVector(0, 0, 1, 0), tVector::Zero(),
 		tVector(0, 1, 0, 0), shadow_size, shadow_size, shadow_near_z,
 		shadow_far_z);
@@ -549,9 +552,24 @@ void cDrawScene::SetupMeshShader()
 	mShaderMesh->SetUniform4(mMeshFogColorHandle, fog_col);
 	mShaderMesh->SetUniform4(mMeshFogDataHandle, fog_data);
 
+	if(0xffffffff==mMeshShadowProjHandle)return;
 	tMatrix view_world = mCamera.BuildViewWorldMatrix();
 	tMatrix shadow_view = mShadowCam.BuildWorldViewMatrix();
 	tMatrix shadow_proj = mShadowCam.BuildProjMatrix();
+	{
+		tMatrix shadow_mat = shadow_view * view_world;
+		float shadow_mat_data[] = {
+				(float)shadow_mat(0, 0), (float)shadow_mat(1, 0),
+				(float)shadow_mat(2, 0), (float)shadow_mat(3, 0),
+				(float)shadow_mat(0, 1), (float)shadow_mat(1, 1),
+				(float)shadow_mat(2, 1), (float)shadow_mat(3, 1),
+				(float)shadow_mat(0, 2), (float)shadow_mat(1, 2),
+				(float)shadow_mat(2, 2), (float)shadow_mat(3, 2),
+				(float)shadow_mat(0, 3), (float)shadow_mat(1, 3),
+				(float)shadow_mat(2, 3), (float)shadow_mat(3, 3)};
+		glProgramUniformMatrix4fv(mShaderMesh->GetProg(), mMeshShadowViewHandle, 1,
+															false, shadow_mat_data);
+	}
 	tMatrix shadow_mat = shadow_proj * shadow_view * view_world;
 
 	float shadow_mat_data[] = { (float)shadow_mat(0, 0), (float)shadow_mat(1, 0), (float)shadow_mat(2, 0), (float)shadow_mat(3, 0),
@@ -565,6 +583,7 @@ void cDrawScene::SetupMeshShader()
 
 void cDrawScene::DoShadowPass()
 {
+	if(mMeshShadowProjHandle==0xffffffff)return;
 	// front face culling to prevent shelf occlusion
 	glCullFace(GL_FRONT);
 
@@ -577,7 +596,7 @@ void cDrawScene::DoShadowPass()
 
 	mShadowMap->BindBuffer();
 	mShaderDepth->Bind();
-	cDrawUtil::ClearColor(tVector(1, 1, 1, 0));
+	cDrawUtil::ClearColor(tVector(256, 1, 1, 0));
 	cDrawUtil::ClearDepth(1);
 
 	// shadow pass
@@ -591,7 +610,7 @@ void cDrawScene::DoShadowPass()
 	DrawObjs();
 	DrawMisc();
 	glCullFace(GL_BACK);
-	DrawGround();
+	//DrawGround();
 
 	mShaderDepth->Unbind();
 	mShadowMap->UnbindBuffer();

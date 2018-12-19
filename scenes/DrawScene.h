@@ -54,6 +54,7 @@ protected:
 	GLuint mMeshLightColourHandle;
 	GLuint mMeshAmbientColourHandle;
 	GLuint mMeshShadowProjHandle;
+	GLuint mMeshShadowViewHandle;
 	GLuint mMeshMaterialDataHandle;
 	GLuint mMeshFogColorHandle;
 	GLuint mMeshFogDataHandle;

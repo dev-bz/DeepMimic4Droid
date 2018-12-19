@@ -5935,13 +5935,35 @@ const char* lodepng_error_text(unsigned code)
 /* ////////////////////////////////////////////////////////////////////////// */
 /* ////////////////////////////////////////////////////////////////////////// */
 
+#ifdef __ANDROID__
+#include <string>
+extern "C" int get_asset_data_size(const char *path, long* size, unsigned char **out);
+extern "C" void  free_asset_data_size(unsigned char **out);
+#endif
 #ifdef LODEPNG_COMPILE_CPP
+#ifdef __ANDROID__
+#include <string>
+extern "C" int get_asset_data_size(const char *path, long* size, unsigned char **out);
+extern "C" void  free_asset_data_size(unsigned char **out);
+#endif
 namespace lodepng
 {
 
 #ifdef LODEPNG_COMPILE_DISK
 unsigned load_file(std::vector<unsigned char>& buffer, const std::string& filename)
 {
+#ifdef __ANDROID__
+  long len;
+  unsigned char *out = NULL;
+  if (get_asset_data_size(filename.c_str(), &len, &out) == 0) {
+    buffer.resize(size_t(len));
+    memcpy(buffer.data(), out, len);
+    free_asset_data_size(&out);
+    return 0;
+  }
+	std::string _filename = "apkoverlay/assets/"+filename;
+	#define filename _filename
+#endif
   std::ifstream file(filename.c_str(), std::ios::in|std::ios::binary|std::ios::ate);
   if(!file) return 78;
 

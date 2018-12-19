@@ -3,6 +3,7 @@
 
 #include "sim/SimCharacter.h"
 #include "util/FileUtil.h"
+#include "android_file.hpp"
 
 const std::string gPDParamKeys[cPDController::eParamMax] =
 {

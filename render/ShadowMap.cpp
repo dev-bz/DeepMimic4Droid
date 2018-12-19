@@ -43,7 +43,19 @@ bool cShadowMap::Init(unsigned int width, unsigned int height)
 
 	GLenum status;
 	if ((status = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA,
+								 GL_FLOAT, 0);
+		GLuint depthbuffer;
+		glGenRenderbuffers(1, &depthbuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, depthbuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+															GL_RENDERBUFFER, depthbuffer);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+													 mTexture, 0);
+		if ((status = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE)
 		printf("texture is incomplete/n");
+		glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);

@@ -4,6 +4,7 @@
 
 #include "util/FileUtil.h"
 #include "sim/RBDUtil.h"
+#include "android_file.hpp"
 
 const int cKinTree::gPosDim = 3;
 const int cKinTree::gRotDim = 4;

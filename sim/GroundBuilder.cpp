@@ -1,5 +1,6 @@
 #include "GroundBuilder.h"
 #include "sim/GroundPlane.h"
+#include "android_file.hpp"
 
 bool cGroundBuilder::ParseParamsJson(const std::string& param_file, cGround::tParams& out_params)
 {

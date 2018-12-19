@@ -80,7 +80,7 @@ clean:
 	$(RMObjects)
 
 %.d: %.c
-	gcc -MM -MG -MF $@  -MT "$*.o" -MT "$*.d" $(CFLAGS) $<
+	gcc -MM -MG -MF $@  -MT "$*.o" -MT "$*.d" $(CPPFLAGS) $<
 %.d: %.cc
 	g++ -MM -MG -MF $@ -MT "$*.o" -MT "$*.d" $(CPPFLAGS) $<
 %.d: %.cxx

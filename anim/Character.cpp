@@ -6,6 +6,7 @@
 #include "util/JsonUtil.h"
 #include "render/MeshUtil.h"
 #include "render/DrawUtil.h"
+#include "android_file.hpp"
 
 // Json keys
 const std::string cCharacter::gSkeletonKey = "Skeleton";
