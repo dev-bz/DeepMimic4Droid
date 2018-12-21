@@ -7,8 +7,8 @@ cShader cDrawUtil::gDefaultProg = cShader();
 cShader cDrawUtil::gCopyProg = cShader();
 cShader cDrawUtil::gCopyMeshProg = cShader();
 
-const int gNumSlice = 16;
-const int gNumStacks = 8; // should always be even
+const int gNumSlice = 12;
+const int gNumStacks = 6; // should always be even
 
 const int gMatStackSize = 128;
 cMatrixStack cDrawUtil::gMatStackView = cMatrixStack(gMatStackSize);

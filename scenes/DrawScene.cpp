@@ -17,7 +17,7 @@ const tVector gVisOffset = tVector(0, 0, 1, 0); // offset for visualization elem
 
 cDrawScene::cDrawScene()
 {
-	mCamTrackMode = eCamTrackModeXZ;
+	mCamTrackMode = eCamTrackModeXYZ;
 	mDrawInfo = false;
 }
 
@@ -161,6 +161,7 @@ void cDrawScene::UpdateCameraTracking()
 		tVector track_pos = GetCamTrackPos();
 		tVector focus_pos = mCamera.GetFocus();
 		tVector cam_pos = mCamera.GetPosition();
+		track_pos[1] = track_pos[1] * 0.01 + focus_pos[1] * 0.99;
 		mCamera.TranslateFocus(track_pos);
 	}
 	else if (mode == eCamTrackModeXZ
@@ -590,7 +591,7 @@ void cDrawScene::DoShadowPass()
 	float dist = 30.f;
 	const tVector& sun_dir = GetLightDirection();
 	tVector delta = dist * sun_dir;
-	tVector focus = mCamera.GetFocus();
+	tVector focus = GetCamTrackPos(); // mCamera.GetFocus();
 	mShadowCam.SetPosition(focus + delta);
 	mShadowCam.SetFocus(focus);
 
