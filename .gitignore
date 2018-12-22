@@ -1,0 +1,12 @@
+*.o
+*.d
+*.bin
+*.apk
+*.sln
+*.vcxproj
+*.filters
+.gitignore
+DeepMimicCore.i
+a.out
+apkoverlay
+data

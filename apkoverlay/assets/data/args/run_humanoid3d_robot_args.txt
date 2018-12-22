@@ -1,0 +1,20 @@
+--scene imitate
+--num_update_substeps 10
+--num_sim_substeps 2
+--world_scale 4
+--char_types general
+--character_files data/characters/robot3d.txt
+--enable_char_soft_contact false
+#--fall_contact_bodies 0 1 2 3 4 6 7 8 9 10 12 13 14
+--enable_char_contact_fall false
+
+--char_ctrls ct_pd
+--char_ctrl_files data/controllers/robot3d_ctrl.txt
+--sync_char_root_pos true
+--sync_char_root_rot false
+--train_agents false
+--model_files data/policies/humanoid3d/humanoid3d_spinkick.ckpt
+
+#--scene kin_char
+#--character_file data/characters/humanoid3d.txt
+--motion_file data/motions/robot3d.txt

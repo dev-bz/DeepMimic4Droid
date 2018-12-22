@@ -1,0 +1,157 @@
+name: "BoxNet"
+
+layer { 
+  name: 'input' 
+  type: 'Input' 
+  top: "input"
+  top: "label"
+  input_param {
+    shape: { dim: 1 dim: 197 } 
+    shape: { dim: 1 dim: 36 } 
+  }
+
+  include: { phase: TRAIN }
+}
+
+layer { 
+  name: 'input' 
+  type: 'Input' 
+  top: 'input' 
+  input_param { 
+    shape: { dim: 1 dim: 197} 
+  } 
+
+  include: { phase: TEST }
+}
+
+layer {
+    bottom: "input"
+    top: "normal"
+    name: "normal"
+    type: "Scale"
+    scale_param {
+        bias_term: true
+    }
+    param {
+        name: "normal_conv1_0"
+          lr_mult: 0.1
+    }
+    param {
+        name: "normal_conv1_1"
+          lr_mult: 0.1
+    }
+}
+layer {
+  name: "ip0"
+  type: "InnerProduct"
+  bottom: "normal"
+  top: "ip0"
+  param {
+    lr_mult: 1
+	decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+	decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 1024
+    transpose: true
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+layer {
+  name: "relu0"
+  type: "ReLU"
+  bottom: "ip0"
+  top: "relu0"
+}
+
+layer {
+  name: "ip1"
+  type: "InnerProduct"
+  bottom: "relu0"
+  top: "ip1"
+  param {
+    lr_mult: 1
+	decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+	decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 512
+    transpose: true
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "ip1"
+  top: "relu1"
+}
+
+layer {
+  name: "_output"
+  type: "InnerProduct"
+  bottom: "relu1"
+  top: "_output"
+  param {
+    lr_mult: 1
+	decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+	decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 36
+    transpose: true
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+    bottom: "_output"
+    top: "output"
+    name: "output"
+    type: "Scale"
+    scale_param {
+        bias_term: true
+    }
+    param {
+        name: "scale_conv1_0"
+          lr_mult: 0.1
+    }
+    param {
+        name: "scale_conv1_1"
+          lr_mult: 0.1
+    }
+}
+layer {
+  name: "loss"
+  type: "EuclideanLoss"
+  bottom: "output"
+  bottom: "label"
+  top: "loss"
+
+  include: { phase: TRAIN }
+}
