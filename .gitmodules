@@ -1,0 +1,6 @@
+[submodule "cblas"]
+	path = cblas
+	url = https://github.com/xianyi/OpenBLAS
+[submodule "eigen-git"]
+	path = eigen-git
+	url = https://github.com/eigenteam/eigen-git-mirror
