@@ -104,6 +104,7 @@ $(HOME)/cblas/Makefile:cblas/CMakelists.txt
 endif
 thrid/bullet3-2.87/build/local:thrid/bullet3-2.87/build/Makefile
 	make install -j4 -C thrid/bullet3-2.87/build
+	touch -r $@ $<
 
 thrid/bullet3-2.87/build/Makefile:thrid/bullet3-2.87/CMakelists.txt
 	mkdir -p thrid/bullet3-2.87/build
@@ -119,5 +120,5 @@ thrid/bullet3.tar.gz:
 
 -include $(DependFiles) ""
 #$(error $(DependFiles))
-net.o:net.c makefile .cide $(OPENBLAS)
+net.o:net.c Makefile .cide $(OPENBLAS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o net.o net.c $(OPENMP)
