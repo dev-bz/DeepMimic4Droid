@@ -31,14 +31,14 @@ DEPEND_OPTIONS = -MM -MF "$*.d" \
 DEPEND_MOVEFILE = then $(MV) -f "$(ObjDir)/$*.d.tmp" "$(ObjDir)/$*.d"; \
                   else $(RM) "$(ObjDir)/$*.d.tmp"; exit 1; fi
 
-CPPFLAGS+= -DCPU_ONLY -U__ARM_NEON -I. -Ithrid/bullet3-2.87/build/local/include/bullet -Iutil -Ieigen-git
+CPPFLAGS+= -DCPU_ONLY -U__ARM_NEON -I. -Ithrid/bullet3-2.87/build/local/include/bullet -Iutil -Ilocal/include/eigen3
 USE_CBLAS:=1
 USE_CAFFE:=2
 NetWork:=1
 ifeq ($(NetWork),$(USE_CBLAS))
-LDFLAGS+=  -Lcblas/build/lib64 -lopenblas
-OPENMP:=-Icblas/build/include/openblas -DUSE_CBLAS
-OPENBLAS:=cblas/build/lib64/libopenblas.a
+LDFLAGS+=  -Llocal/lib64 -lopenblas
+OPENMP:=-Ilocal/include/openblas -DUSE_CBLAS
+OPENBLAS:=local/lib64/libopenblas.a
 else ifeq ($(NetWork),$(USE_CAFFE))
 LDFLAGS+=  -Wl,--whole-archive -lcaffe -Wl,--no-whole-archive -lcaffeproto -lglog -lgflags -lopenblas -lprotobuf
 CPPFLAGS+=-DUSE_CAFFE
@@ -98,10 +98,19 @@ ifdef OPENBLAS
 $(OPENBLAS):$(HOME)/cblas/Makefile
 	@echo build openblas by Makefile
 	make install -j4 -C $(HOME)/cblas
+	touch -r $@ $<
 
 $(HOME)/cblas/Makefile:cblas/CMakelists.txt
-	cd $(HOME);mkdir -p cblas;cd cblas;cmake -D NOFORTRAN=1 -D CMAKE_INSTALL_PREFIX="$(ProjectDir)/build" -G "Unix Makefiles" $(ProjectDir)/cblas
+	cd $(HOME);mkdir -p cblas;cd cblas;cmake -D NOFORTRAN=1 -D CMAKE_INSTALL_PREFIX="$(ProjectDir)/local" -G "Unix Makefiles" $(ProjectDir)/cblas
 endif
+local/include/eigen3:eigen-git/build/Makefile
+	cd eigen-git/build;make install
+
+eigen-git/build/Makefile:eigen-git/CMakelists.txt
+	mkdir -p eigen-git
+	mkdir -p eigen-git/build
+	cd eigen-git/build;cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../local
+
 thrid/bullet3-2.87/build/local:thrid/bullet3-2.87/build/Makefile
 	make install -j4 -C thrid/bullet3-2.87/build
 	touch -r $@ $<

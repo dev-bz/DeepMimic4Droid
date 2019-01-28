@@ -172,6 +172,7 @@ tMatrix cMathUtil::RotateMat(const tVector& euler)
 
 tMatrix cMathUtil::RotateMat(const tVector& axis, double theta)
 {
+	//\
 	assert(std::abs(axis.squaredNorm() - 1) < 0.0001);
 	
 	double c = std::cos(theta);
@@ -180,6 +181,13 @@ tMatrix cMathUtil::RotateMat(const tVector& axis, double theta)
 	double y = axis[1];
 	double z = axis[2];
 
+	auto sn = axis.squaredNorm();
+	if (std::abs(sn - 1) > 0.0001) {
+		sn = 1.0 / std::sqrt(sn);
+		x *= sn;
+		y *= sn;
+		z *= sn;
+	}
 	tMatrix mat;
 	mat <<	c + x * x * (1 - c),		x * y * (1 - c) - z * s,	x * z * (1 - c) + y * s,	0,
 			y * x * (1 - c) + z * s,	c + y * y * (1 - c),		y * z * (1 - c) - x * s,	0,
