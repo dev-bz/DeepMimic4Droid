@@ -36,10 +36,8 @@ extern "C" void startLoop(int width, int height) {
 	SetupDraw();
 	DrawMainLoop();
 }
-extern "C" void use_arg(const char *path, int cmd) {
-	if (cmd == 0)
-		load_actor(path);
-	else if (gArgs.size() > 1) {
+extern "C" void use_arg(const char *path) {
+	if (gArgs.size() > 1) {
 		gArgs[1] = path;
 		Reload();
 	}

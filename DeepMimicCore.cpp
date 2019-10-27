@@ -538,7 +538,7 @@ void cDeepMimicCore::SetSampleCount(int count)
 	}
 }
 
-extern "C" void use_arg(const char *path, int cmd);
+extern "C" void load_actor(int id, const char *path,int in,int out);
 void cDeepMimicCore::SetupScene()
 {
 	ClearScene();
@@ -564,13 +564,17 @@ void cDeepMimicCore::SetupScene()
 		mScene->Init();
 		printf("Loaded scene: %s\n", mScene->GetName().c_str());
 	}
-	std::string model_files = "";
-	mArgParser->ParseString("model_files", model_files);
-	if (model_files != "") {
-		int p = model_files.find(".ckpt");
-		if (p > 0)
-			model_files.replace(p, 5, "_float.bin");
-		use_arg(model_files.c_str(), 0);
+	std::vector<std::string> model_files;
+	mArgParser->ParseStrings("model_files", model_files);
+	for (int id = 0; id < model_files.size();++id){
+		auto model_file = model_files[id];
+		if (model_file != "") {
+			int p = model_file.find(".ckpt");
+			if (p > 0)
+				model_file.replace(p, 5, "_float.bin");
+			load_actor(id, model_file.c_str(), GetStateSize(id),
+					GetActionSize(id));
+		}
 	}
 }
 

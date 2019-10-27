@@ -1,4 +1,4 @@
---scene imitate
+#--scene imitate
 --num_update_substeps 10
 --num_sim_substeps 2
 --world_scale 4
@@ -15,6 +15,6 @@
 --train_agents false
 --model_files data/policies/humanoid3d/humanoid3d_spinkick.ckpt
 
-#--scene kin_char
-#--character_file data/characters/humanoid3d.txt
+--scene kin_char
+--character_file data/characters/humanoid3d.txt
 --motion_file data/motions/humanoid3d_spinkick.txt

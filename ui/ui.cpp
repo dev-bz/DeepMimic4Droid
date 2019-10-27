@@ -36,24 +36,22 @@ extern "C" void layer_name(const char *name) {
 }
 extern "C" void dirent_name(const char *d_name) {
 	std::string n(d_name);
-	int p = n.find("run_");
-	if (p == 0) {
+	int p = n.find("train_");
+	if (p != 0) {
 		model_files.push_back("data/args/" + n);
 		n.replace(n.size() - 9, 9, "");
-		n.replace(0, 15, "");
+		// n.replace(0, 15, "");
 		model_names.push_back(n);
 	}
 }
-int dirent_file(const struct dirent *d) {
-
-	if ((d->d_type & DT_DIR) == 0) {
-		dirent_name(d->d_name);
-	}
-	return 0;
+int dirent_file(const struct dirent *d) { return ((d->d_type & DT_DIR) == 0); }
+int __comparator(const struct dirent **l, const struct dirent **r) {
+	return strcmp((*l)->d_name, (*r)->d_name);
 }
-extern "C" void use_arg(const char *path, int cmd);
+
+extern "C" void use_arg(const char *path);
 extern "C" void box2d_ui(int width, int height, int mx, int my,
-												 unsigned char mbut, int scroll) {
+						 unsigned char mbut, int scroll) {
 
 	if (mbut) {
 		imguiBeginFrame(mx, height - my, mbut, scroll);
@@ -66,15 +64,16 @@ extern "C" void box2d_ui(int width, int height, int mx, int my,
 	size += (ui::DEFAULT_SPACING)*4;
 	if (state_show)
 		size += ui::BUTTON_HEIGHT * 8 +
-						ui::DEFAULT_SPACING * 7; // btMax(width, height) * 3 / 8;
+				ui::DEFAULT_SPACING * 7; // btMax(width, height) * 3 / 8;
 	char title[64];
 	sprintf(title, "DeepMimic FPS:%4.1f", gUpdatesPerSec);
 	// sprintf(title, "%4.2f,%4.2f,%4.2f,%4.2f", gyro[0], gyro[1], gyro[2],
 	// gyro[3]);
 	over |= imguiBeginScrollArea(
-			title, width - btMin(width, height) * 2 / 3 - (width > height ? 120 : 0),
-			height - size - 60, btMin(width, height) * 2 / 3 - 10, size,
-			&state_scroll);
+		title,
+		width - btMin(width, height) * 2 / 3 - (width > height ? 120 : 0),
+		height - size - 60, btMin(width, height) * 2 / 3 - 10, size,
+		&state_scroll);
 	if (settings) {
 		char info[64];
 		if (imguiButton("Show Kin", true)) {
@@ -85,7 +84,7 @@ extern "C" void box2d_ui(int width, int height, int mx, int my,
 			Keyboard('m', 1, 1);
 		}
 		if (imguiButton("Change Shadow", true)) {
-			no_shadow = (no_shadow+1)%3;
+			no_shadow = (no_shadow + 1) % 3;
 			Keyboard('m', 1, 1);
 		}
 		if (imguiButton("Back", true)) {
@@ -128,13 +127,19 @@ extern "C" void box2d_ui(int width, int height, int mx, int my,
 			scandir("data/args", &d, dirent_file, 0);
 			if (model_files.size() == 0) {
 				struct dirent **d;
-				scandir("apkoverlay/assets/data/args", &d, dirent_file, 0);
+				int cnt = scandir("apkoverlay/assets/data/args", &d,
+								  dirent_file, __comparator);
+				for (int n = 0; n < cnt; ++n) {
+					dirent_name(d[n]->d_name);
+					free(d[n]);
+				}
+				free(d);
 			}
 		}
 
 		for (int i = 0; i < model_files.size(); ++i) {
 			if (imguiItem(model_names[i].c_str(), true)) {
-				use_arg(model_files[i].c_str(), 1);
+				use_arg(model_files[i].c_str());
 			}
 		}
 	}

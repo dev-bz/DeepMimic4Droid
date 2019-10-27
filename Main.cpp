@@ -117,7 +117,7 @@ void Update(double time_elapsed)
 				++gSampleCount;
 
 				std::vector<double> action = std::vector<double>(gCore->GetActionSize(id), 0);
-				compute(s.data(), s.size(), action.data(), action.size());
+				compute(id, s.data(), action.data());
 				gCore->SetAction(id, action);
 			}
 		}
