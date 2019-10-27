@@ -1,0 +1,7 @@
+--scene kin_char
+
+--character_file data/characters/dog3d.txt
+--motion_file data/motions/dog3d_pace.txt
+#--motion_file data/motions/dog3d_canter.txt
+#--motion_file data/motions/dog3d_turn.txt
+#--motion_file data/motions/dog3d_trot.txt

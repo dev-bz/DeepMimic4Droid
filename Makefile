@@ -1,7 +1,6 @@
 ifndef OUTPUT
 OUTPUT:=/data/user/0/org.c.ide/files/tmpdir/a.out
 endif
-
 ProjectDir:=$(PWD)
 
 shared:= $(filter -shared, $(LINK))
@@ -30,7 +29,6 @@ DEPEND_OPTIONS = -MM -MF "$*.d" \
          -MT "$*.o" -MT "$*.d"
 DEPEND_MOVEFILE = then $(MV) -f "$(ObjDir)/$*.d.tmp" "$(ObjDir)/$*.d"; \
                   else $(RM) "$(ObjDir)/$*.d.tmp"; exit 1; fi
-
 CPPFLAGS+= -DCPU_ONLY -U__ARM_NEON -I. -Ithrid/bullet3-2.87/build/local/include/bullet -Iutil -Ilocal/include/eigen3
 USE_CBLAS:=1
 USE_CAFFE:=2
@@ -129,5 +127,5 @@ thrid/bullet3.tar.gz:
 
 -include $(DependFiles) ""
 #$(error $(DependFiles))
-net.o:net.c Makefile .cide $(OPENBLAS)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o net.o net.c $(OPENMP)
+net.o:net.cpp Makefile .cide $(OPENBLAS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o net.o net.cpp $(OPENMP)
